@@ -43,11 +43,6 @@ public class EmbeddedRedisServer extends ExternalResource {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.junit.rules.ExternalResource#after()
-	 */
 	@Override
 	protected void after() {
 

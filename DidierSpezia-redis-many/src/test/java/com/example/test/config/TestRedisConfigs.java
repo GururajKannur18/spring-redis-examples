@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @Slf4j
-@EnableRedisRepositories(basePackages = "com.mastercard.customer.program.repository")
+@EnableRedisRepositories(basePackages = "com.example.repository")
 public class TestRedisConfigs {
 
 	@Bean
