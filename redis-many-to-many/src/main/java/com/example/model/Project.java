@@ -7,14 +7,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Address {
+public class Project {
 	@Indexed
-	private String street;
+	private String projectName;
 	@Indexed
-	private String city;
+	private String projectCategory;
 }

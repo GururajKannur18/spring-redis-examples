@@ -15,13 +15,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@RedisHash("employees")
-public class Employee {
-	@Id @Indexed
+@RedisHash("departments")
+public class Department {
+	@Id
 	private String id;
-	private String firstName;
-	private String lastName;
-	private List<Address> addresses;
-	
-	private List<Department> departments;
+	@Indexed
+	private String departmentName;
+	private List<Project> projects;
 }
