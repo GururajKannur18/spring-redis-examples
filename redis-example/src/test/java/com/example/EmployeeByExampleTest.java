@@ -11,10 +11,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Example;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.example.model.SpecialUser;
 import com.example.model.User;
 import com.example.repository.UserRepository;
 import com.mastercard.config.RepositoryTestSupport;
+
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
+import static org.springframework.data.domain.ExampleMatcher.*;
+import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.*;
+import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.startsWith;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -22,7 +28,7 @@ public class EmployeeByExampleTest extends RepositoryTestSupport {
 	@Autowired
 	UserRepository repository;
 
-	User skyler, walter, flynn;
+	User skyler, walter, flynn, marie, hank;
 
 	@Before
 	public void setUp() {
@@ -30,8 +36,10 @@ public class EmployeeByExampleTest extends RepositoryTestSupport {
 		repository.deleteAll();
 
 		this.skyler = repository.save(new User("Skyler", "White", 45));
-		this.walter = repository.save(new SpecialUser("Walter", "White", 50));
-		this.flynn = repository.save(new SpecialUser("Walter Jr. (Flynn)", "White", 17));
+		this.walter = repository.save(new User("Walter", "White", 50));
+		this.flynn = repository.save(new User("Walter Jr. (Flynn)", "White", 17));
+		this.marie = repository.save(new User("Marie", "Schrader", 38));
+		this.hank = repository.save(new User("Hank", "Schrader", 43));
 	}
 
 	@Test
@@ -41,6 +49,28 @@ public class EmployeeByExampleTest extends RepositoryTestSupport {
 
 	@Test
 	public void countSubtypesByExample() {
-		assertThat(repository.count(Example.of(new SpecialUser(null, "White", null))), is(2L));
+		assertThat(repository.count(Example.of(new User(null, "Schrader", null))), is(2L));
 	}
+	
+	@Test
+	public void ignorePropertiesAndMatchByAge() {
+
+		Example<User> example = Example.of(flynn, matching().//
+				withIgnorePaths("firstname", "lastname"));
+
+		Iterable<User> findAll = repository.findAll(example);
+		for (User user : findAll) {
+			System.out.println("USER ? "+user);
+		}
+		
+	}
+	
+	/*@Test
+	public void substringMatching() {
+
+		Example<User> example = Example.of(new User("er", null, null), matching().//
+				withStringMatcher(StringMatcher.ENDING));
+
+		assertThat(repository.findAll(example), hasItems(skyler, walter));
+	}*/
 }

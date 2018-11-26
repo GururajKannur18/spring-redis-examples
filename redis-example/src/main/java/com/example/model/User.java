@@ -2,20 +2,28 @@ package com.example.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 
 @Data
-@NoArgsConstructor(force = true)
-@RequiredArgsConstructor
-@RedisHash("user")
+@RedisHash("User")
 public class User {
  
     private @Id Long id;
-    private final String firstname; 
-    private final String lastname;
-    private final Integer age;
+    @Indexed
+    private String firstname; 
+    @Indexed
+    private String lastname;
+    private Integer age;
+    
+    public User() {}
+
+	public User(String firstname, String lastname, Integer age) {
+		super();
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.age = age;
+	}
 }
