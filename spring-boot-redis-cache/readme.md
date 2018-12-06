@@ -1,4 +1,4 @@
-#Swagger
+# Swagger
 
 ```
 http://localhost:8080/management/v1/swagger-ui.html#
@@ -12,7 +12,7 @@ This page will walk through Spring Boot Redis cache example. RedisCacheManager i
 Spring @EnableCaching enables Spring cache management capability in our application. It is annotated with @SpringBootApplication annotation. @Cacheable indicates that the result of invoking method can be cached and once result is cached, next call to method execution is skipped and only cached result is served. @CachePut adds or updates cache but does not skip method execution. @CacheEvict evicts cache but does not skip method execution. @Caching is used to group multiple cache annotations.
 
 
-#Technologies Used
+# Technologies Used
 Find the technologies being used in our example. 
 1. Java 9 
 2. Spring 5.0.8.RELEASE 
@@ -22,7 +22,7 @@ Find the technologies being used in our example.
 6. MySQL 5.5 
 7. Eclipse Oxygen
 
-#Maven File
+# Maven File
 Spring provides spring-boot-starter-data-redis to resolve Redis dependencies. It provides basic auto configurations for Lettuce and Jedis client libraries. By default Spring Boot 2.0 uses Lettuce. To get pooled connection factory we need to provide commons-pool2 dependency. Find the Maven file. 
 
 
@@ -58,10 +58,10 @@ spring.redis.lettuce.shutdown-timeout=200ms
 We can override default Redis host, port and password configurations. Use max-wait a negative value if we want to block indefinitely.
 
 
-#RedisCacheManager
+# RedisCacheManager
 In Spring Boot, RedisCacheManager is auto-configured. Here we will discuss how to configure Spring Boot Redis cache properties to change its default value for auto-configured RedisCacheManager and then we will create a sample own RedisCacheManager to get full control on configurations. 
 
-#1. Auto-configured RedisCacheManager
+# 1. Auto-configured RedisCacheManager
 If Redis is available and configured in our Spring Boot application, RedisCacheManager will be auto-configured. We can control Spring cache configurations using spring.cache.* property. 
 spring.cache.type: Defines cache type. If we do not configure this property, It will be auto-detected to the environment. For Redis cache its value is redis . 
 spring.cache.cache-names: Creates additional caches on startup. 
@@ -75,7 +75,7 @@ spring.cache.redis.use-key-prefix: It accepts Boolean value. If true then key pr
 
 
 
-#Using @Cacheable
+# Using @Cacheable
 
 @Cacheable indicates that the result of invoking method can be cached and once result is cached, next call to method execution is skipped and only cached result is served. Find some of its elements. 
 cacheNames: Name of the caches in which method result are stored. 
@@ -116,7 +116,7 @@ public List<Article> getAllArticles(){
 
 In the above code, method result will not be cached if size of the result will be 0. If we do not provide key, by default it will be ("") or method parameters are used to compute the key if available.
 
-#Using @CachePut
+# Using @CachePut
 
 @CachePut triggers a cache put operation. It does not skip method execution and result is cached in associated cache for every execution. @CachePut has elements same like @Cacheable such as cacheNames, value, condition, key, unless, keyGenerator etc. Find the sample code snippet to use @CachePut.
 
@@ -129,7 +129,7 @@ public Article addArticle(Article article){
 
 The above method will execute for every call and method result will be added or updated in cache corresponding to key for given cache name.
 
-#Using @CacheEvict
+# Using @CacheEvict
 
 @CacheEvict triggers a cache evict operation. It does not skip method execution and evicts cache for every execution. It has elements such as cacheNames, value, condition, key, keyGenerator, allEntries etc. If allEntries= true, all entries inside the caches are removed. Find the code snippet to use @CacheEvict.
 
@@ -143,7 +143,7 @@ public void deleteArticle(long articleId) {
 
 The above method will execute every call and all the entries of caches will be removed.
 
-#Using @Caching
+# Using @Caching
 
 @Caching is the group annotation for multiple cache annotations. It has cacheable, put and evict elements. 
 Find the code snippet to use @CachePut and @CacheEvict in group using @Caching.
