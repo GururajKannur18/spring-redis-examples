@@ -1,8 +1,11 @@
 package com.myexample.config;
 
 import java.beans.PropertyEditor;
+import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -26,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Configuration
 public class StudentBatchConfig {
-	private static final SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+	DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 	
 	@Bean(destroyMethod="")
 	@StepScope
@@ -41,7 +44,39 @@ public class StudentBatchConfig {
 		return itemReader;
 	}
 	
+	
+	//Working Logic
 	@SuppressWarnings("rawtypes")
+	@Bean
+	public LineMapper<Student> studentLineMapper() {
+		DefaultLineMapper<Student> lineMapper = new DefaultLineMapper<>();
+
+		// Delimited Line Tokenizer
+		DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();
+		lineTokenizer.setNames("id", "firstName", "lastName", "dateOfBirth");
+		lineTokenizer.setIncludedFields(new int[] {0,1,2,3});
+
+		// Date parsing logic has been added
+		HashMap<Class, PropertyEditor> customEditors = new HashMap<>();
+		customEditors.put(LocalDateTime.class, new PropertyEditorSupport() {
+			@Override
+			public void setAsText(String text){
+				setValue(LocalDateTime.parse(text, DATE_FORMAT));
+			}
+		});
+		
+		// Bean Wrapper Field SetMapper
+		BeanWrapperFieldSetMapper<Student> fieldSetMapper = new BeanWrapperFieldSetMapper<>();
+		fieldSetMapper.setTargetType(Student.class);
+		fieldSetMapper.setCustomEditors(customEditors);
+		
+		lineMapper.setLineTokenizer(lineTokenizer);
+		lineMapper.setFieldSetMapper(fieldSetMapper);
+		return lineMapper;
+	}
+	
+	
+	/*@SuppressWarnings("rawtypes")
 	@Bean
 	public LineMapper<Student> studentLineMapper() {
 		DefaultLineMapper<Student> lineMapper = new DefaultLineMapper<>();
@@ -65,7 +100,7 @@ public class StudentBatchConfig {
 		lineMapper.setLineTokenizer(lineTokenizer);
 		lineMapper.setFieldSetMapper(fieldSetMapper);
 		return lineMapper;
-	}
+	}*/
 	
 	@Bean
 	public StudentWritter studentWritter() {

@@ -1,5 +1,6 @@
 package com.myexample.model;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
@@ -22,5 +23,5 @@ public class Student {
 	private String id;
 	private String firstName;
 	private String lastName;
-	private Date dateOfBirth;
+	private LocalDateTime dateOfBirth;
 }
